@@ -21,9 +21,7 @@ html, body, #app {
     @include flexbox();
     @include flex-direction(column);
     header {
-      @include rect(100%, 0.44rem);
-      @include background-color(#333333);
-      @include color(#ffffff);
+      @include rect(100%, 0.6rem);
     }
     .content {
       @include flex();

@@ -13,6 +13,13 @@ export default new Router({
       redirect: '/home'
     },
     {
+      path: '/detail/:id',
+      name: 'detail',
+      components: {
+        default: () => import('./views/detail/index.vue')
+      }
+    },
+    {
       path: '/home',
       name: 'home',
       components: {
@@ -43,6 +50,16 @@ export default new Router({
         default: () => import('./views/user/index.vue'),
         footer: Footer
       }
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('./views/login/index.vue')
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('./views/register/index.vue')
     },
     {
       path: '/about',

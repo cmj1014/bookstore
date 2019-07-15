@@ -2,15 +2,20 @@
   <div class="container">
     <!-- <header>toubu </header> -->
     <div class="content">
-      <img class="user-poster" src="https://img.yzcdn.cn/public_files/2017/10/23/8690bb321356070e0b8c4404d087f8fd.png">
+      <div class="user-poster">
+        <div class="user-top"  @click="onLogin">
+          <img src="../../../public/img/userimg.jpeg" alt="">
+          <p> {{ username }} </p>
+        </div>
+      </div>
       <van-row class="user-links">
         <van-col span="6">
           <van-icon name="pending-payment" />
-          待付款
+          全部订单
         </van-col>
         <van-col span="6">
           <van-icon name="records" />
-          待接单
+          待付款
         </van-col>
         <van-col span="6">
           <van-icon name="tosend" />
@@ -18,12 +23,12 @@
         </van-col>
         <van-col span="6">
           <van-icon name="logistics" />
-          已发货
+          待收货
         </van-col>
       </van-row>
 
       <van-cell-group class="user-group">
-        <van-cell icon="records" title="全部订单" is-link />
+        <van-cell icon="records" title="个人信息" is-link />
       </van-cell-group>
 
       <van-cell-group>
@@ -36,23 +41,64 @@
 </template>
 
 <script>
-import { Row, Col, Icon, Cell, CellGroup } from 'vant';
+import { Row, Col, Icon, Cell, CellGroup } from 'vant'
+import { mapState } from 'vuex'
 export default {
+  data () {
+    return {
+      username: '点击登录'
+    }
+  },
   components: {
     [Row.name]: Row,
     [Col.name]: Col,
     [Icon.name]: Icon,
     [Cell.name]: Cell,
     [CellGroup.name]: CellGroup
+  },
+  methods: {
+    onLogin () {
+      this.$router.push('/login')
+    }
+  },
+  computed: {
+    ...mapState({
+      loginState: 'loginState'
+    })
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      if (vm.loginState === 'ok') {
+        vm.username = '机智的小恐龙'
+      }
+    })
   }
-};
+}
 </script>
 
 <style lang="scss">
 .user-poster {
   width: 100%;
-  height: 53vw;
+  height: 60vw;
   display: block;
+  background: url(../../../public/img/usertop.png) no-repeat ;
+  background-size: 100% 100%;
+  .user-top {
+    padding-top: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    img {
+      width: 90px;
+      border-radius: 50%;
+    }
+    p {
+      color: #fff;
+      font-size: 20px;
+      padding-top: 15px;
+    }
+  }
 }
 .user-group {
   margin-bottom: 15px;
