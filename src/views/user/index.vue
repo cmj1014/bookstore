@@ -2,7 +2,7 @@
   <div class="container">
     <!-- <header>toubu </header> -->
     <div class="content">
-      <div class="user-poster">
+      <div class="user-poster aaa">
         <div class="user-top"  @click="onLogin">
           <img src="../../../public/img/userimg.jpeg" alt="">
           <p> {{ username }} </p>
@@ -76,10 +76,10 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.user-poster {
+<style lang="scss" scoped>
+.aaa {
   width: 100%;
-  height: 60vw;
+  height: 2.3rem;
   display: block;
   background: url(../../../public/img/usertop.png) no-repeat ;
   background-size: 100% 100%;

@@ -21,7 +21,7 @@ html, body, #app {
     @include flexbox();
     @include flex-direction(column);
     header {
-      @include rect(100%, 0.6rem);
+      @include rect(100%, 0.46rem);
     }
     .content {
       @include flex();

@@ -33,6 +33,7 @@
             </div>
           </div>
           <!-- 好书推荐 -->
+          <div class="prolist_title">好书推荐</div>
           <van-list
             v-model="loading"
             :finished="finished"
@@ -144,6 +145,11 @@ header {
     width: 100%;
   }
 }
+.prolist_title {
+    @include padding(0.15rem 0 0 0.1rem);
+    @include font-size(0.22rem);
+    @include font-weight(500);
+  }
 .content_kind {
   @include flexbox();
   @include rect(100%, 0.8rem);

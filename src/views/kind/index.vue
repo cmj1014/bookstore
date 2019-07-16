@@ -30,10 +30,10 @@
             </van-swipe>
           </div>
           <div class="item2_box">
-            <div class="item2_box1">
+            <div class="item2_box1" @click="goRanking(1, '畅销榜')">
               <img src="../../../public/img/cxb.png" alt="">
             </div>
-            <div class="item2_box1">
+            <div class="item2_box1" @click="goRanking(2, '新书上架')">
               <img src="../../../public/img/xssj.png" alt="">
             </div>
           </div>
@@ -72,6 +72,9 @@ export default {
         .then(res => res.json()).then(data => {
           this.kindlist = data
         })
+    },
+    goRanking (id, msg) {
+      this.$router.push({ name: 'rankinglist', params: { id: id, msg: msg } })
     }
   },
   mounted () {
@@ -94,14 +97,14 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import '@/lib/reset.scss';
 
 header {
   @include padding(0 0 0.05rem 0);
   @include border(0 0 1px 0, #dddddd, solid);
   @include text-align();
-  @include line-height(0.6rem);
+  @include line-height(0.46rem);
   @include font-size(0.2rem);
 }
 .content {
@@ -109,6 +112,9 @@ header {
   .content_item1 {
     @include rect(20%, auto);
     @include overflow;
+    a {
+       @include color(#333);
+    }
   }
   .content_item2 {
     @include flex();

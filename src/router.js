@@ -13,6 +13,13 @@ export default new Router({
       redirect: '/home'
     },
     {
+      path: '/rankinglist/:id/:msg',
+      name: 'rankinglist',
+      components: {
+        default: () => import('./views/rankinglist/index.vue')
+      }
+    },
+    {
       path: '/detail/:id',
       name: 'detail',
       components: {

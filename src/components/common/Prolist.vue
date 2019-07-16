@@ -1,6 +1,5 @@
 <template>
   <ul class="prolist">
-    <div class="prolist_title">好书推荐</div>
     <!-- 编程式导航 -->
     <li class="proitem" v-for="(item, index) of prolist" :key="index" @click="goDeta(item.id)">
       <div class="itemimg">
@@ -36,11 +35,6 @@ export default {
 <style lang="scss">
 @import '@/lib/reset.scss';
 .prolist {
-  .prolist_title {
-    @include padding(0.15rem 0 0 0.1rem);
-    @include font-size(0.22rem);
-    @include font-weight(500);
-  }
   .proitem {
     @include flexbox();
     @include rect(100%, 1.1rem);
