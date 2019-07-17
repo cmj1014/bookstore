@@ -10,7 +10,70 @@
         @click-right='share'
       />
       <div class='content'>
-        {{ title }}
+        <!-- 主图 -->
+        <div class="bookCover">
+          <div class="master">
+            <a :href="img"><img :src="img" alt=""></a>
+            <!-- <a href="http://image31.bookschina.com/2019/zuo/6/8041723.jpg"><img src="http://image31.bookschina.com/2019/zuo/6/8041723.jpg" alt=""></a> -->
+          </div>
+        </div>
+        <!-- 详情 -->
+        <div class="content_item">
+          <p>{{ title }}</p>
+          <div class="introduction">
+            {{ intro }}
+          </div>
+          <div class="pri">
+            <div class="pri_1"> {{ money }} </div>
+            <div class="sales">月销量&nbsp;:&nbsp;&nbsp;50本</div>
+          </div>
+        </div>
+        <div class="empty"></div>
+        <van-row>
+          <van-col span="24">{{ writer }}</van-col>
+          <van-col span="24">{{ publishingouse }}</van-col>
+          <van-col span="24">{{ time }}</van-col>
+          <van-col span="24">分类: {{ kind }} </van-col>
+        </van-row>
+        <div class="explain">
+          <van-row>
+            <van-col span="8">
+              <van-icon name="passed" />
+              <span>&nbsp;&nbsp;正版好图书</span>
+            </van-col>
+            <van-col span="8">
+              <van-icon name="passed" />
+              <span>&nbsp;&nbsp;满69包邮</span>
+            </van-col>
+            <van-col span="8">
+              <van-icon name="passed" />
+              <span>&nbsp;&nbsp;特价1折起</span>
+            </van-col>
+          </van-row>
+        </div>
+        <div class="reminder">
+          <p>温馨提示：5折以下图书主要为出版社尾货，大部分为全新，个别图书品相8.9成新、切口有划线标记、光盘等附件不全</p>
+        </div>
+        <div class="empty"></div>
+        <div class="adphoto">
+          <img src="http://image31.bookschina.com/pro-images/190717wz/700185.jpg?id=1" alt="">
+        </div>
+        <div class="empty"></div>
+        <div class="detail_tip">
+          <p class="detail_p">图文详情</p>
+          <div class="detail_content">
+            <h5>内容简介:</h5>
+            <p>{{ intro }}</p>
+          </div>
+        </div>
+        <h4 class="five">本类五星书籍</h4>
+        <div class="detail_item">
+            <Detaillist :detaillist='detaillist'/>
+          </div>
+        <div class="empty"></div>
+        <div class="empty"></div>
+        <div class="empty"></div>
+        <div class="empty"></div>
       </div>
     </div>
     <van-goods-action>
@@ -20,7 +83,7 @@
       <van-goods-action-button type='warning' text='加入购物车' @click='addCart' />
       <van-goods-action-button type='danger' text='立即购买' @click='buy' />
     </van-goods-action>
-    <van-sku
+    <!-- <van-sku
       v-model='show'
       stepper-title='我要买'
       :sku='sku'
@@ -28,89 +91,45 @@
       show-add-cart-btn
       reset-stepper-on-hide
       :initial-sku='initialSku'
-    ></van-sku>
+    ></van-sku> -->
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
-import { GoodsAction, GoodsActionIcon, GoodsActionButton, NavBar, Sku } from 'vant'
+import { GoodsAction, GoodsActionIcon, GoodsActionButton, NavBar, Sku, Tab, Tabs, Row, Col, Icon, Toast } from 'vant'
+import Detaillist from '@/components/common/Detaillist'
 Vue.use(GoodsAction)
   .use(GoodsActionIcon)
   .use(GoodsActionButton)
 Vue.use(NavBar)
 Vue.use(Sku)
+Vue.use(Tab).use(Tabs)
+Vue.use(Row).use(Col)
+Vue.use(Icon)
+Vue.use(Toast)
 
 export default {
   data () {
     return {
+      id: '',
       title: '',
+      img: '',
+      intro: '',
+      money: '',
+      writer: '',
+      publishingouse: '',
+      time: '',
+      kind: '',
       rating: '',
+      activeNames: ['0'],
       show: false,
-      goods: {
-        // 商品标题
-        title: '测试商品',
-        // 默认商品 sku 缩略图
-        picture: 'https://img.yzcdn.cn/1.jpg'
-      },
-      initialSku: {
-        // 键：skuKeyStr（sku 组合列表中当前类目对应的 key 值）
-        // 值：skuValueId（规格值 id）
-        s1: '30349',
-        s2: '1193',
-        // 初始选中数量
-        selectedNum: 3
-      },
-      sku: {
-        // 所有sku规格类目与其值的从属关系，比如商品有颜色和尺码两大类规格，颜色下面又有红色和蓝色两个规格值。
-        // 可以理解为一个商品可以有多个规格类目，一个规格类目下可以有多个规格值。
-        tree: [
-          {
-            k: '颜色', // skuKeyName：规格类目名称
-            v: [
-              {
-                id: '30349', // skuValueId：规格值 id
-                name: '红色', // skuValueName：规格值名称
-                imgUrl: 'https://img.yzcdn.cn/1.jpg' // 规格类目图片，只有第一个规格类目可以定义图片
-              },
-              {
-                id: '1215',
-                name: '蓝色',
-                imgUrl: 'https://img.yzcdn.cn/2.jpg'
-              }
-            ],
-            k_s: 's1' // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
-          }
-        ],
-        // 所有 sku 的组合列表，比如红色、M 码为一个 sku 组合，红色、S 码为另一个组合
-        list: [
-          {
-            id: 2259, // skuId，下单时后端需要
-            price: 100, // 价格（单位分）
-            s1: '1215', // 规格类目 k_s 为 s1 的对应规格值 id
-            s2: '1193', // 规格类目 k_s 为 s2 的对应规格值 id
-            s3: '0', // 最多包含3个规格值，为0表示不存在该规格
-            stock_num: 110 // 当前 sku 组合对应的库存
-          }
-        ],
-        price: '1.00', // 默认价格（单位元）
-        stock_num: 227, // 商品总库存
-        collection_id: 2261, // 无规格商品 skuId 取 collection_id，否则取所选 sku 组合对应的 id
-        none_sku: false, // 是否无规格商品
-        messages: [
-          {
-            // 商品留言
-            datetime: '0', // 留言类型为 time 时，是否含日期。'1' 表示包含
-            multiple: '0', // 留言类型为 text 时，是否多行文本。'1' 表示多行
-            name: '留言', // 留言名称
-            type: 'text', // 留言类型，可选: id_no（身份证）, text, tel, date, time, email
-            required: '1' // 是否必填 '1' 表示必填
-          }
-        ],
-        hide_stock: false // 是否隐藏剩余库存
-      }
+      detaillist: []
     }
+  },
+  components: {
+    Detaillist
   },
   computed: {
     ...mapState({
@@ -140,7 +159,9 @@ export default {
       // this.show = true
       const { $store: { state: { loginState } } } = this
       if (loginState === 'ok') {
-        console.log('加入购物车')
+        Toast.success('成功加入购物车')
+        // var arr = []
+        // var goodid = getCook
       } else {
         this.$router.push('/login')
       }
@@ -162,16 +183,146 @@ export default {
   mounted () {
     console.log(this.$route)
     const { id } = this.$route.params
-    fetch('https://www.daxunxun.com/detail?id=' + id)
+    fetch('/api/book/find?id=' + id)
       .then(res => res.json())
       .then(data => {
-        // console.log(data[0])
-        this.title = data[0].title
-        this.rating = data[0].rating.average
+        let detailData = data.data[0]
+        this.id = detailData.id
+        this.title = detailData.bookname
+        this.img = detailData.img
+        this.intro = detailData.intro
+        this.money = detailData.money
+        this.writer = detailData.writer
+        this.publishingouse = detailData.publishingouse
+        this.time = detailData.time
+        this.kind = detailData.kind
+        fetch('/api/book/find?kind=' + this.kind, { method: 'GET' })
+          .then(res => res.json()).then(data => {
+            this.detaillist = data.data
+          })
       })
   }
 }
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
+@import '@/lib/reset.scss';
+
+.box {
+  @include rect(100%, 100%);
+  @include flexbox();
+  .container {
+    @include flex ();
+    @include rect(100%, auto);
+    @include flexbox();
+    @include flex-direction(column);
+    .content {
+      @include flex();
+      @include rect(100%, auto);
+      @include overflow();
+      .bookCover {
+        @include rect(100%, 3rem);
+        @include padding(0.1rem 0);
+        .master {
+          @include rect(2.8rem, 2.8rem);
+          @include margin(auto);
+          @include border(1px, #ddd, solid);
+          @include text-align();
+          img{
+            @include rect(auto, 2.6rem);
+            @include padding(0.1rem);
+          }
+        }
+      }
+      .content_item {
+        @include padding(0.1rem);
+        @include border(1px 0 0, #ddd, solid);
+        p {
+          @include font-size(20px);
+          @include font-weight(700);
+        }
+        .introduction {
+          @include rect(100%, 1rem);
+          @include margin(0.15rem 0);
+          @include line-height(0.24rem);
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 4;
+          overflow: hidden;
+        }
+        .pri {
+          @include flexbox();
+          @include justify-content(space-between);
+          .pri_1 {
+            @include font-size(0.3rem);
+            @include color(#e60000);
+            @include font-weight(bold);
+          }
+          .sales{
+            @include padding(0.2rem 0 0);
+          }
+        }
+      }
+      .empty {
+          @include rect(100%, 0.2rem);
+          @include background-color(#efefef)
+      }
+      .van-row {
+        .van-col {
+          @include padding(0.1rem 0.1rem);
+          @include border(1px 0 0, #ddd, solid);
+          @include font-size(0.16rem);
+        }
+      }
+      .explain {
+        @include background-color(#efefef);
+        @include rect(100%, 0.4rem);
+        .van-col {
+          @include color(#e60000);
+          @include font-size(14px);
+        }
+        span {
+          @include font-size(14px);
+          @include color(#666);
+        }
+      }
+      .reminder {
+        p {
+          @include rect(100%, 0.6rem);
+          @include color(#dd3535);
+          @include font-size(12px);
+          @include padding(0.1rem);
+          @include line-height(0.22rem);
+        }
+      }
+      .adphoto {
+        img {
+          @include rect(100%, auto);
+        }
+      }
+      .detail_tip {
+        .detail_p {
+          @include text-align();
+          @include font-size(20px);
+          @include font-weight(700);
+          @include padding(0.15rem);
+          @include border(0 0 1px, #dddddd, solid);
+        }
+        .detail_content {
+          h5 {
+            @include padding(0.15rem 0.15rem 0);
+          }
+          p {
+            @include padding(0.15rem);
+            @include line-height(0.25rem);
+          }
+        }
+      }
+      .five {
+          @include padding(0.1rem);
+          @include background-color(#efefef);
+        }
+    }
+  }
+}
 </style>

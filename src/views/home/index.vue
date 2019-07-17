@@ -85,7 +85,7 @@ export default {
     onLoad () {
       console.log('可以加载数据了')
       this.loading = true // 开始加载数据
-      fetch('https://www.daxunxun.com/douban?count=20&start=' + this.pageNum * 20)
+      fetch('/api/book/find?count=20&start=' + this.pageNum * 20)
         .then(res => res.json()).then(data => {
           this.loading = false // 数据加载完毕
           this.pageNum++
@@ -94,7 +94,7 @@ export default {
             this.finished = true // 没有数据了
           } else {
             // 有数据就要涉及到数字的合并   concat
-            this.prolist = [...this.prolist, ...data]
+            this.prolist = [...this.prolist, ...data.data]
           }
         })
     }
@@ -110,16 +110,17 @@ export default {
         })
         this.bannerlist = arr
       })
-    fetch('https://www.daxunxun.com/douban')
+    fetch('/api/book/find', { method: 'GET' })
       .then(res => res.json())
       .then(data => {
-        this.prolist = data
+        console.log(data.data)
+        this.prolist = data.data
       })
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import '@/lib/reset.scss';
 
 header {

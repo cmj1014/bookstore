@@ -1,7 +1,7 @@
 <template>
-  <ul class="kindlist">
+  <ul class="detaillist">
     <!-- 编程式导航 -->
-    <li class="kinditem" v-for="(item, index) of kindlist" :key="index" @click="goDeta(item.id)">
+    <li class="detailitem" v-for="(item, index) of detaillist" :key="index" @click="goDeta(item.id)">
       <div class="itemimg">
         <img :src="item.img" :alt="item.alt" :οnerrοr="logo">
       </div>
@@ -20,7 +20,7 @@ export default {
     }
   },
   props: {
-    kindlist: Array
+    detaillist: Array
   },
   methods: {
     goDeta (id) {
@@ -32,13 +32,13 @@ export default {
 
 <style lang="scss">
 @import '@/lib/reset.scss';
-.kindlist {
+.detaillist {
   @include flexbox();
   @include margin(0.1rem 0 0 0);
   @include flex-wrap(wrap);
-  .kinditem {
+  .detailitem {
     @include flexbox();
-    @include rect(33%, 1.2rem);
+    @include rect(49%, 1.2rem);
     @include padding(0.1rem);
     @include flex-direction(column);
     @include margin(0.1rem 0);

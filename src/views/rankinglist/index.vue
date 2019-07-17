@@ -37,10 +37,10 @@ export default {
   mounted () {
     const { id, msg } = this.$route.params
     this.header_msg = msg
-    fetch('https://www.daxunxun.com/douban?count=20&start=' + id * 20)
+    fetch('/api/book/find?kind=' + id, { method: 'GET' })
       .then(res => res.json())
       .then(data => {
-        this.prolist = data
+        this.prolist = data.data
       })
   }
 }

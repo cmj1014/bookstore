@@ -4,20 +4,20 @@
       <div class="content">
         <div class="content_item1">
           <van-sidebar v-model="activeKey">
-            <van-sidebar-item title="小说" @click="goDeta(0)"/>
-            <van-sidebar-item title="文学" @click="goDeta(1)"/>
-            <van-sidebar-item title="少儿" @click="goDeta(2)"/>
-            <van-sidebar-item title="历史" @click="goDeta(3)"/>
-            <van-sidebar-item title="哲学/宗教" @click="goDeta(4)"/>
-            <van-sidebar-item title="传记" @click="goDeta(5)"/>
-            <van-sidebar-item title="社会科学" @click="goDeta(6)"/>
-            <van-sidebar-item title="文化" @click="goDeta(7)"/>
-            <van-sidebar-item title="政治军事" @click="goDeta(1)"/>
-            <van-sidebar-item title="成功/励志" @click="goDeta(2)"/>
-            <van-sidebar-item title="中小学教辅" @click="goDeta(3)"/>
-            <van-sidebar-item title="外语" @click="goDeta(4)"/>
-            <van-sidebar-item title="古籍" @click="goDeta(5)"/>
-            <van-sidebar-item title="管理" @click="goDeta(6)"/>
+            <van-sidebar-item title="小说" @click="goDeta('小说')"/>
+            <van-sidebar-item title="文学" @click="goDeta('文学')"/>
+            <van-sidebar-item title="童书" @click="goDeta('童话')"/>
+            <van-sidebar-item title="历史" @click="goDeta('历史')"/>
+            <van-sidebar-item title="哲学/宗教" @click="goDeta('哲学/宗教')"/>
+            <van-sidebar-item title="传记" @click="goDeta('传记')"/>
+            <van-sidebar-item title="社会科学" @click="goDeta('社会科学')"/>
+            <van-sidebar-item title="文化" @click="goDeta('文化')"/>
+            <van-sidebar-item title="政治军事" @click="goDeta('政治')"/>
+            <van-sidebar-item title="成功/励志" @click="goDeta('成功激励')"/>
+            <van-sidebar-item title="军事" @click="goDeta('军事')"/>
+            <van-sidebar-item title="外语" @click="goDeta('外语')"/>
+            <van-sidebar-item title="古籍" @click="goDeta('古籍')"/>
+            <van-sidebar-item title="管理" @click="goDeta('管理')"/>
           </van-sidebar>
         </div>
         <div class="content_item2">
@@ -30,10 +30,10 @@
             </van-swipe>
           </div>
           <div class="item2_box">
-            <div class="item2_box1" @click="goRanking(1, '畅销榜')">
+            <div class="item2_box1" @click="goRanking('传记', '畅销榜')">
               <img src="../../../public/img/cxb.png" alt="">
             </div>
-            <div class="item2_box1" @click="goRanking(2, '新书上架')">
+            <div class="item2_box1" @click="goRanking('军事', '新书上架')">
               <img src="../../../public/img/xssj.png" alt="">
             </div>
           </div>
@@ -67,10 +67,12 @@ export default {
     Kindlist
   },
   methods: {
-    goDeta (num) {
-      fetch('https://www.daxunxun.com/douban?count=20&start=' + num * 20)
+    goDeta (kind) {
+      // fetch('https://www.daxunxun.com/douban?count=20&start=' + num * 20)
+      fetch('/api/book/find?kind=' + kind, { method: 'GET' })
         .then(res => res.json()).then(data => {
-          this.kindlist = data
+          console.log(data.data)
+          this.kindlist = data.data
         })
     },
     goRanking (id, msg) {
@@ -89,10 +91,11 @@ export default {
         this.bannerlist = arr
       })
     // 请求的是列表的数据
-    fetch('https://www.daxunxun.com/douban').then(res => res.json()).then(data => {
-      console.log(data)
-      this.kindlist = data
-    })
+    fetch('/api/book/find?kind=小说', { method: 'GET' })
+      .then(res => res.json()).then(data => {
+        console.log(data.data)
+        this.kindlist = data.data
+      })
   }
 }
 </script>
