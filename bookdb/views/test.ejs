@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+	
+	提交测试<br>
+	<form action="http://10.11.56.164:8090/users/addAction" method="post">
+		<h2>用户注册</h2>
+		电话号码<input type="text" name="tel">
+		密码<input type="text" name="password">
+		<input type="submit" value="提交">
+	</form>
+	<form action="http://10.11.56.164:8090/users/gettel" method="get">
+		<h2>电话号码查询</h2>
+		电话号码<input type="text" name="tel">
+		<input type="submit" value="提交">
+	</form>
+	<form action="/status/addCode" method="get">
+		<h2>发送验证码(未完成)</h2>
+		电话号码<input type="text" name="tel">
+		<input type="submit" value="提交">
+	</form>
+	<form action="http://10.11.56.164:8090/book" method="get">
+		<h2>查看所有书籍</h2>
+		<input type="submit" value="提交">
+	</form>
+	<form action="http://10.11.56.164:8090/book/find" method="get">
+		<h2>查看分类书籍</h2>
+		书籍种类<input type="text" name="kind">
+		书籍名称<input type="text" name="bookname">
+		<input type="submit" value="提交">
+	</form>
+	<form action="http://10.11.56.164:8090/book/distinctkind" method="get">
+		<h2>查看书籍种类</h2>
+		<input type="submit" value="提交">
+	</form>
+  </body>
+</html>
