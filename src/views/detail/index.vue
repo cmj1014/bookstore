@@ -68,8 +68,8 @@
         </div>
         <h4 class="five">本类五星书籍</h4>
         <div class="detail_item">
-            <Detaillist :detaillist='detaillist'/>
-          </div>
+          <Detaillist :detaillist='detaillist'/>
+        </div>
         <div class="empty"></div>
         <div class="empty"></div>
         <div class="empty"></div>

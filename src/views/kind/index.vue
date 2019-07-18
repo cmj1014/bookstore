@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-      <header>书城分类</header>
+      <Header />
       <div class="content">
         <div class="content_item1">
           <van-sidebar v-model="activeKey">
@@ -50,6 +50,7 @@
 import Vue from 'vue'
 import { Sidebar, SidebarItem, Swipe, SwipeItem } from 'vant'
 import Kindlist from '@/components/common/Kindlist'
+import Header from '@/components/common/Header'
 
 Vue.use(Sidebar)
 Vue.use(SidebarItem)
@@ -64,7 +65,8 @@ export default {
     }
   },
   components: {
-    Kindlist
+    Kindlist,
+    Header
   },
   methods: {
     goDeta (kind) {
@@ -80,12 +82,14 @@ export default {
     }
   },
   mounted () {
-    fetch('https://www.daxunxun.com/banner')
+    fetch('/api/banner')
       .then(res => res.json())
       .then(data => {
+        console.log(data.data)
+        var dataD = data.data
         var arr = []
-        data.map(item => {
-          item = 'https://www.daxunxun.com' + item
+        dataD.map(item => {
+          item = item.bannerImg
           arr.push(item)
         })
         this.bannerlist = arr
@@ -103,13 +107,6 @@ export default {
 <style lang="scss" scoped>
 @import '@/lib/reset.scss';
 
-header {
-  @include padding(0 0 0.05rem 0);
-  @include border(0 0 1px 0, #dddddd, solid);
-  @include text-align();
-  @include line-height(0.46rem);
-  @include font-size(0.2rem);
-}
 .content {
   @include flexbox();
   .content_item1 {
@@ -125,9 +122,9 @@ header {
     @include flex-direction(column);
     @include padding(0.1rem);
     .item2_banner {
-      @include rect(100%, 1.8rem);
+      @include rect(100%, 1.15rem);
       .van-swipe {
-        @include rect(100%, 1.8rem);
+        @include rect(100%, 1.15rem);
         img {
           @include rect(100%, auto);
         }
@@ -137,6 +134,7 @@ header {
       @include rect(100%, auto);
       @include flexbox();
       @include justify-content(space-between);
+      @include padding(0 0 0.1rem);
       img {
         @include rect(98%, auto);
       }

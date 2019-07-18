@@ -1,10 +1,6 @@
 <template>
   <div class="container">
-      <header>
-        <span class="header_span">书城</span>
-        <van-search placeholder="请输入搜索关键词" />
-        <router-link to="kind" tag="span" class="iconfont iconfenlei3 header_iconfont"></router-link>
-      </header>
+      <Header />
       <div class="content">
         <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
           <!-- 轮播图 -->
@@ -16,22 +12,45 @@
           <!-- 分类导航 -->
           <div class="content_kind">
             <div class="kind_1">
-              <span class="iconfont iconningmeng-"></span>
-              <span>榜单</span>
+              <img src="../../../public/img/tb1.png" alt="" @click="goRanking('传记', '畅销榜')">
+              <span>畅销榜</span>
             </div>
             <div class="kind_1">
-              <span class="iconfont iconfanqie"></span>
-              <span>分类</span>
+              <img src="../../../public/img/tb2.png" alt="" @click="goRanking('成功激励', '淘好书')">
+              <span>淘好书</span>
             </div>
             <div class="kind_1">
-              <span class="iconfont iconniupai-"></span>
-              <span>精品</span>
+              <img src="../../../public/img/tb3.png" alt="" @click="goRanking('文化', '9.9包邮')">
+              <span>9.9包邮</span>
             </div>
             <div class="kind_1">
-              <span class="iconfont icontaozi-"></span>
-              <span>完结</span>
+              <img src="../../../public/img/tb5.png" alt="" @click="goRanking('军事', '新上架')">
+              <span>新上架</span>
+            </div>
+            <div class="kind_1">
+              <img src="../../../public/img/tb6.png" alt="" @click="goRanking('小说', '在线读')">
+              <span>在线读</span>
             </div>
           </div>
+          <div class="empty"></div>
+          <img class="tip" src="../../../public/img/tip1.jpg" alt="">
+          <!-- 新书速递 -->
+          <div class="new">
+            <div class="new_top">
+              <div class="new_img">
+                <img src="../../../public/img/newbook.png" alt="">
+              </div>
+              <div class="new_check" @click="add">
+                <van-icon name="replay" />
+                <span>换一批</span>
+              </div>
+            </div>
+            <div class="new_item">
+              <Detaillist :detaillist='detaillist'/>
+            </div>
+          </div>
+          <!-- 推荐书单 -->
+          <div class="recommend"></div>
           <!-- 好书推荐 -->
           <div class="prolist_title">好书推荐</div>
           <van-list
@@ -49,28 +68,35 @@
 
 <script>
 import Vue from 'vue'
-import { Search, Swipe, SwipeItem, Grid, GridItem, List, PullRefresh } from 'vant'
+import { Search, Swipe, SwipeItem, Grid, GridItem, List, PullRefresh, Icon } from 'vant'
 import Prolist from '@/components/common/Prolist'
+import Header from '@/components/common/Header'
+import Detaillist from '@/components/common/Detaillist'
 
 Vue.use(Search)
 Vue.use(Swipe).use(SwipeItem)
 Vue.use(Grid).use(GridItem)
 Vue.use(List)
 Vue.use(PullRefresh)
+Vue.use(Icon)
 export default {
   data () {
     return {
       bannerlist: [],
       prolist: [],
+      detaillist: [],
       loading: false,
       finished: false,
       pageNum: 1,
       isLoading: false,
-      flag: false
+      flag: false,
+      num: 1
     }
   },
   components: {
-    Prolist
+    Prolist,
+    Detaillist,
+    Header
   },
   methods: {
     onRefresh () {
@@ -97,15 +123,27 @@ export default {
             this.prolist = [...this.prolist, ...data.data]
           }
         })
+    },
+    goRanking (id, msg) {
+      this.$router.push({ name: 'rankinglist', params: { id: id, msg: msg } })
+    },
+    add () {
+      this.num++
+      fetch('/api/book/find?count=4&start=' + this.num * 4, { method: 'GET' })
+        .then(res => res.json()).then(data => {
+          this.detaillist = data.data
+        })
     }
   },
   mounted () {
-    fetch('https://www.daxunxun.com/banner')
+    fetch('/api/banner')
       .then(res => res.json())
       .then(data => {
+        console.log(data.data)
+        var dataD = data.data
         var arr = []
-        data.map(item => {
-          item = 'https://www.daxunxun.com' + item
+        dataD.map(item => {
+          item = item.bannerImg
           arr.push(item)
         })
         this.bannerlist = arr
@@ -116,6 +154,10 @@ export default {
         console.log(data.data)
         this.prolist = data.data
       })
+    fetch('/api/book/find?count=4&start=' + this.num * 4, { method: 'GET' })
+      .then(res => res.json()).then(data => {
+        this.detaillist = data.data
+      })
   }
 }
 </script>
@@ -123,25 +165,8 @@ export default {
 <style lang="scss" scoped>
 @import '@/lib/reset.scss';
 
-header {
-  @include flexbox();
-  @include justify-content(space-around);
-  @include align-items();
-  .header_span {
-    @include font-size(0.25rem);
-    padding-left: 10px;
-  }
-  .van-search {
-    @include flex();
-    @include rect(auto, 0.5rem);
-  }
-  .header_iconfont {
-    @include font-size(0.3rem);
-    padding-right: 10px;
-  }
-}
 .van-swipe {
-  height: 2.3rem;
+  height: 1.55rem;
   img {
     width: 100%;
   }
@@ -163,8 +188,39 @@ header {
     @include justify-content();
     @include align-items();
     @include font-size(0.16rem);
-    .iconfont {
-      @include font-size(0.35rem);
+    img {
+      @include rect(auto, 0.45rem);
+    }
+    span {
+      font-size: 14px;
+    }
+  }
+}
+.tip {
+  @include rect(100%, auto);
+  @include padding(0.05rem);
+}
+.empty {
+  @include rect(100%, 0.1rem);
+  @include background-color(#efefef)
+}
+.new {
+  .new_top {
+    @include padding(0.15rem 0);
+    @include flexbox();
+    @include rect(100%, 0.4rem);
+    @include border(1px 0, #dddddd, solid);
+    @include align-items();
+    .new_img {
+      @include flex(3.5);
+      img {
+      @include rect(1.4rem, auto);
+      }
+    }
+    .new_check {
+      @include flex(1);
+      @include color(#333);
+      @include font-size(0.16rem);
     }
   }
 }

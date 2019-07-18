@@ -31,7 +31,8 @@ html, body, #app {
   }
   footer {
     @include rect(100%, 0.5rem);
-    @include background-color(#efefef);
+    background: #fff;
+    box-shadow: 0px 0px 3px #8e8e8e;
     ul {
       @include rect(100%, 100%);
       @include flexbox();
@@ -50,7 +51,7 @@ html, body, #app {
         }
 
         &.router-link-active {
-          @include color(#f66);
+          @include color(#e63b3b);
         }
       }
     }
