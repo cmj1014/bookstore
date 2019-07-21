@@ -14,15 +14,16 @@ router.get('/name', function(req, res, next) {
 router.post('/addAction', function(req, res, next) {
 	let insertData = req.query;// 获得提交数据
 	let tel = req.query.tel;//手机号
-	if(undefined ==tel||""==tel.trim()||null ==tel){
+	if(undefined ==tel||""==tel||null ==tel){
 		res.send({"code":"500","msg":"号码不能为空"});
 	}
+	
 	let sendCode = "";// 短信验证码
 	let arr =new Object;
 	//添加用户sql
 	sql.insert(User,insertData).then((data)=>{
 		let len = data.length;
-		console.log(len)
+		//console.log(len)
 		if(len ==0){// 没有查询到
 			arr = {"code":"404","msg":"没有注册成功","data":data};
 		}else if(len >0){
@@ -39,15 +40,15 @@ router.post('/addAction', function(req, res, next) {
   
 });
 // 查询手机号
-router.get("/gettel",function(req, res){
+router.post("/gettel",function(req, res){
 	let arr =new Object;
-	let whereObj = req.query;//获取提交数据
-	
+	let whereObj = req.body;//获取提交数据
+	console.log("req.body"+req.body.tel)
 	//查询数据
 	sql.find(User,whereObj).then((data)=>{
-		console.log("ret"+data)
+	//console.log("ret"+data)
 		let len = data.length;
-		console.log(len)
+		//console.log(len)
 		if(len ==0){// 没有查询到
 			arr = {"code":"404","msg":"没有查询到该号码","data":data};
 		}else if(len >0){
@@ -59,6 +60,38 @@ router.get("/gettel",function(req, res){
 	})
 	
 })
+// 手机号登录
+router.post("/login",function(req, res){
+	//console.log("login")
+	let arr ="-1";
+	let username = req.body.username;//获取提交数据
+	let password = req.body.password;//获取提交数据
+	//console.log(req.body)
+	//console.log(username,password)
+	//查询数据
+	sql.find(User,{tel:username}).then((data)=>{
+		//console.log("ret"+data)
+		let len = data.length;
+		//console.log(len)
+		if(len ==0){// 没有查询到
+			arr = "2";
+		}else if(len >0){
+			//console.log(data[0].password);
+			if(data[0].password===password){
+				arr = "1";
+			}else{
+				arr = "-1";
+			}
+			
+		}else{
+			arr = "-1";
+		}
+		//console.log(arr);
+		 res.send(arr); 
+	})
+	
+})
+
 
 function findData(whereObj){
 	return sql.find(User,whereObj).then((data)=>{

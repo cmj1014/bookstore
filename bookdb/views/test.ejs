@@ -39,5 +39,43 @@
 		<h2>查看书籍种类</h2>
 		<input type="submit" value="提交">
 	</form>
+	<form action="http://10.11.56.164:8090/orders/add" method="get">
+		<h2>提交订单</h2>
+		手机号<input type="text" name="tel" value="18939920572">
+		书名<input type="goodsname" name="tel" value="中国风俗文化集萃---中国善恶报应习俗">
+		商品_id<input type="text" name="goodsId" value="5d2d938f104f4e76ab1c70f5">
+		商品id<input type="text" name="goodsid" value="6012">
+		总价格<input type="text" name="money" value="212">
+		单价<input type="text" name="unitPrice" value="32">
+		商品图片<input type="text" name="img" value="http://image31.bookschina.com/2018/zuo/11/5574720.jpg">
+分类<input type="text" name="kind" value="文化">
+购买数量<input type="text" name="num" value="6">
+购买用户id<input type="text" name="userid" value="5d2f1b6944e8c9bded11f656">
+		<input type="submit" value="提交">
+	</form>
+	<form action="http://10.11.56.164:8090/orders/getUserOrder" method="post">
+			<h2>查看订单</h2>
+			手机号<input type="text" name="tel" value="18939920572">
+			<!-- 书名<input type="goodsname" name="tel" value="中国风俗文化集萃---中国善恶报应习俗">
+			商品_id<input type="text" name="goodsId" value="5d2d938f104f4e76ab1c70f5">
+			商品id<input type="text" name="goodsid" value="6012">
+			总价格<input type="text" name="money" value="212">
+			单价<input type="text" name="unitPrice" value="32">
+			商品图片<input type="text" name="img" value="http://image31.bookschina.com/2018/zuo/11/5574720.jpg">
+	分类<input type="text" name="kind" value="文化">
+	购买数量<input type="text" name="num" value="6">
+	购买用户id<input type="text" name="userid" value="5d2f1b6944e8c9bded11f656"> -->
+			<input type="submit" value="提交">
+		</form>
   </body>
+  <script>
+  shopid()
+  function shopid(){
+	  let date = new Date();
+	  date= date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()+" "+(date.getHours())+":"+date.getMinutes()+":"+date.getSeconds();
+	  //alert(date)
+	  return date
+  }
+  
+  </script>
 </html>

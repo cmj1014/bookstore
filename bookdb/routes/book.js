@@ -6,21 +6,20 @@ var sql = require('./../sql/index'); // <==>  ./../sql
 /* GET 所有书籍. */
 router.get('/', function(req, res, next) {
 	let whereObj = req.query;
-	let count = 20;//默认显示多少条数据
-	let start = 0;//默认开始数据
-	count = isparam(whereObj.count,20);
-	start = isparam(whereObj.start,0);
-	
-	if(count===20){
+	let count = 20; //默认显示多少条数据
+	let start = 0; //默认开始数据
+	count = isparam(whereObj.count, 20);
+	start = isparam(whereObj.start, 0);
+	if (undefined !== whereObj.count && "" !== whereObj.count) {
 		delete whereObj.count;
 	}
-	if(start ===0){
+	if (undefined !== whereObj.start && "" !== whereObj.start) {
 		delete whereObj.start;
 	}
-	console.log("whereObj.count"+whereObj.count);
-	console.log(".count"+count);
-	sql.find(Books,{},count,start).then((data) => {
-		
+	console.log("whereObj.count" + whereObj.count);
+	console.log(".count" + count);
+	sql.find(Books, {}, count, start).then((data) => {
+
 		let arr = new Object; //存内容
 		let len = data.length;
 		console.log(len)
@@ -49,23 +48,59 @@ router.get('/', function(req, res, next) {
 //条件查询书籍
 router.get('/find', function(req, res, next) {
 	let whereObj = req.query;
-	let count = 20;//默认显示多少条数据
-	let start = 0;//默认开始数据
-	count = isparam(whereObj.count,20);
-	start = isparam(whereObj.start,0);
-
-	if(undefined!==whereObj.count&&""!==whereObj.count){
+	let count = 20; //默认显示多少条数据
+	let start = 0; //默认开始数据
+	count = isparam(whereObj.count, 20);
+	start = isparam(whereObj.start, 0);
+	if (undefined !== whereObj.count && "" !== whereObj.count) {
 		delete whereObj.count;
 	}
-	if(undefined !==whereObj.start&&""!==whereObj.start){
+	if (undefined !== whereObj.start && "" !== whereObj.start) {
 		delete whereObj.start;
 	}
-	
-	// console.log("whereObj.count"+whereObj.count);
-	// console.log(".count"+count);
+
+	//console.log("whereObj.count" + whereObj.count);
+	//console.log(".count" + count);
 	//调sql 命令，返回json对象 
-	console.log(whereObj)
-	sql.find(Books, whereObj,count,start).then((data) => {
+	//console.log(whereObj)
+	sql.find(Books, whereObj, count, start).then((data) => {
+		let arr = new Object; //存内容
+		let len = data.length;
+		console.log(len)
+		if (len == 0) { // 没有查询到
+			arr = {
+				"code": "404",
+				"msg": "没有内容",
+				"data": data
+			};
+		} else if (len > 0) {
+			arr = {
+				"code": "1",
+				"msg": "查询成功",
+				"data": data
+			};
+		} else {
+			arr = {
+				"code": "500",
+				"msg": "查询异常",
+				"data": data
+			};
+		}
+		res.send(arr);
+	})
+});
+// 根据_id查详情
+router.get('/byId', function(req, res, next) {
+	let count = 20; //默认显示多少条数据
+	let start = 0; //默认开始数据
+	let mongoose = require('mongoose');
+	let _id = req.query._id;
+	_id = mongoose.Types.ObjectId(_id);
+	//调sql 命令，返回json对象 
+	//console.log(whereObj)
+	sql.find(Books, {
+		_id: _id
+	}, count, start).then((data) => {
 		let arr = new Object; //存内容
 		let len = data.length;
 		console.log(len)
@@ -127,11 +162,37 @@ router.get('/search', function(req, res, next) {
 	//调sql 命令，返回json对象 
 	//console.log(whereObj)
 	let search = req.query.search;
-	sql.find(Books, 
-	{$or: [
-	         {"bookname": {$regex:search}}, {"subhead":{$regex:search}},{"intro":{$regex:search}},{"writer":{$regex:search}},{"publishingouse":{$regex:search}},{"kind":{$regex:search}},{"money":{$regex:search}}
-	      ]}
-	).then((data) => {
+	sql.find(Books, {
+		$or: [{
+			"bookname": {
+				$regex: search
+			}
+		}, {
+			"subhead": {
+				$regex: search
+			}
+		}, {
+			"intro": {
+				$regex: search
+			}
+		}, {
+			"writer": {
+				$regex: search
+			}
+		}, {
+			"publishingouse": {
+				$regex: search
+			}
+		}, {
+			"kind": {
+				$regex: search
+			}
+		}, {
+			"money": {
+				$regex: search
+			}
+		}]
+	}).then((data) => {
 		let arr = new Object; //存内容
 		let len = data.length;
 		console.log(len)
@@ -166,11 +227,11 @@ function findbooks(whereObj) {
 
 }
 //判断时候有值
-function isparam(dataObj,num) {
-	if(undefined!==dataObj&&""!==dataObj){
-		return  Number(dataObj);
-	}else{
-		return num;
+function isparam(dataObj, num) {
+	if (undefined !== dataObj && "" !== dataObj) {
+		return Number(dataObj);
+	} else {
+		return num
 	}
 }
 
