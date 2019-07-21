@@ -32,7 +32,8 @@ html, body, #app {
   footer {
     @include rect(100%, 0.5rem);
     background: #fff;
-    box-shadow: 0px 0px 3px #8e8e8e;
+    border-top: 1px solid #efefef;
+    // box-shadow: 0px 0px 3px #8e8e8e;
     ul {
       @include rect(100%, 100%);
       @include flexbox();

@@ -6,141 +6,259 @@
       left-arrow
       @click-left="onClickLeft"
     />
-    <div class="content">
+    <div class="content"  v-if = "cartlist.length > 0">
       <van-notice-bar
         text="优惠活动:年中大促全场5万册图书5折封顶每满68包邮快来抢购吧！"
         left-icon="volume-o"
       />
-      <van-checkbox-group class="card-goods" v-model="checkedGoods">
-        <van-checkbox
-          class="card-goods__item"
-          v-for="item in goods"
-          :key="item.id"
-          :name="item.id"
-        >
-          <van-card
-            :title="item.title"
-            :desc="item.desc"
-            :num="item.num"
-            :price="formatPrice(item.price)"
-            :thumb="item.thumb"
-          >
-            <div slot="tags">
-              <van-tag plain type="danger">标签</van-tag>
-              <van-tag plain type="danger">标签</van-tag>
+      <ul>
+        <li v-for="(item, index) of cartlist" :key="index">
+          <input type="checkbox" v-model="item.flag">
+          <div class="item_right">
+            <div class="item_img">
+              <img :src="item.img" alt="" class="cartimg">
             </div>
-            <div slot="footer">
-              <van-button size="mini">按钮</van-button>
-              <van-button size="mini">按钮</van-button>
+            <div class="right_con">
+              <p>{{ item.bookname }}</p>
+              <div class="right_info">
+                <span>{{ item.money }}</span>
+                <div class="right_btn">
+                  <div class="right_btn1" @click="item.num >=2 ? item.num -=1 : item.num = 1">-</div>
+                  <div class="right_num">{{ item.num }}</div>
+                  <div class="right_btn1" @click="item.num += 1">+</div>
+                </div>
+              </div>
+              <div class="del" @click="deleteItem(index)">删除</div>
             </div>
-          </van-card>
-        </van-checkbox>
-      </van-checkbox-group>
+          </div>
+        </li>
+      </ul>
     </div>
-    <van-submit-bar
-      :price="totalPrice"
-      :button-text="submitBarText"
-      :disabled="!checkedGoods.length"
-      @submit="onSubmit"
-    >
+    <div class="content" v-else>
+      <div class="box_else">
+        <img src="../../../public/img/kong.png" alt="">
+        <span>您的购物车暂无商品</span>
+        <div class="else_button" @click="goHome">随便逛逛</div>
+      </div>
+    </div>
+    <div class="end">
       <van-checkbox v-model="checked">全选</van-checkbox>
-      <!-- <span slot="tip">
-        你的收货地址不支持同城送, <span>修改地址</span>
-      </span> -->
-    </van-submit-bar>
+      <div class="end_box">
+        <p class="p1">合计:</p>
+        <!-- {{ totalPrice }} -->
+        <!-- <p class="p2">￥{{ totalNum }}</p> -->
+        <p class="p2">￥{{ totalPrice }}</p>
+        <p class="p3" @click="Settlement">结算</p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
-import { NavBar, Checkbox, CheckboxGroup, Card, SubmitBar, Toast, Row, Col, NoticeBar, Icon } from 'vant'
+import { NavBar, NoticeBar, Checkbox, CheckboxGroup, ImagePreview } from 'vant'
+import { mapState } from 'vuex'
 
-Vue.use(Row).use(Col)
 Vue.use(NavBar)
 Vue.use(NoticeBar)
-Vue.use(Icon)
+Vue.use(Checkbox).use(CheckboxGroup)
+Vue.use(ImagePreview)
 export default {
-  components: {
-    [Card.name]: Card,
-    [Checkbox.name]: Checkbox,
-    [SubmitBar.name]: SubmitBar,
-    [CheckboxGroup.name]: CheckboxGroup
-  },
   data () {
     return {
-      checkedGoods: ['1', '2', '3'],
-      goods: [{
-        id: '1',
-        title: '乌合之众',
-        desc: '乌合之众',
-        price: 2000,
-        num: 1,
-        thumb: 'http://image31.bookschina.com/2010/20100211/z4346235.jpg'
-      },
-      {
-        id: '2',
-        title: '人类发展',
-        desc: '人类发展',
-        price: 6900,
-        num: 1,
-        thumb: 'http://image31.bookschina.com/2019/zuo/7/7399741.jpg'
-      },
-      {
-        id: '3',
-        title: '管理学深度分析',
-        desc: '管理学深度分析',
-        price: 6800,
-        num: 1,
-        thumb: 'http://imgt.bookschina.com/2019/tuangou/11307_20190716091815.jpg'
-      }]
+      checked: true
     }
   },
   computed: {
-    submitBarText () {
-      const count = this.checkedGoods.length
-      return '结算' + (count ? `(${count})` : '')
+    ...mapState({
+      cartlist (state) {
+        return state.cartlist
+      },
+      loginState (state) {
+        return state.loginState
+      }
+    }),
+    totalNum () {
+      return this.$store.getters.totalNum
     },
     totalPrice () {
-      return this.goods.reduce((total, item) => total + (this.checkedGoods.indexOf(item.id) !== -1 ? item.price : 0), 0)
+      return this.$store.getters.totalPrice
     }
   },
   methods: {
-    formatPrice (price) {
-      return (price / 100).toFixed(2)
-    },
-    onSubmit () {
-      Toast('点击结算')
+    deleteItem (index) {
+      let arr = this.cartlist
+      arr.splice(index, 1) // 整数表示要移出的个数
+      this.$store.commit('changeCartList', {
+        result: arr
+      })
     },
     onClickLeft () {
       this.$router.back()
+    },
+    goHome () {
+      this.$router.push('/home')
+    },
+    Settlement () {
+      ImagePreview([
+        'https://img.yzcdn.cn/2.jpg',
+        '../../../public/img/newbook.png'
+      ]);
+      var that = this
+      setTimeout(function(){
+        that.$router.push('/user')
+      },1000)
     }
+  },
+  mounted () {
+    this.cartlist.map(item => {
+      item.num = 1
+      item.flag = true
+    })
+    // 如果有数据就不需要重新去取
+    // if (this.cartlist.length > 0) {
+    //   return
+    // }
+    // this.$store.commit('changeCartList', {
+    //   result: this.cartlist
+    // })
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      if (vm.loginState === 'ok') {
+        next()
+      } else {
+        next('/login')
+      }
+    })
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.card-goods {
-  padding: 10px 0;
-  background-color: #fff;
-  .card-goods__item {
-    position: relative;
-    background-color: #fafafa;
-    .van-checkbox__label {
-      width: 100%;
-      height: auto; // temp
-      padding: 0 10px 0 15px;
-      box-sizing: border-box;
+
+ul {
+  li {
+    width: 100%;
+    height: 1.3rem;
+    display: flex;
+    align-items: center;
+    padding: 0.1rem;
+    input {
+      width: 0.2rem;
+      height: 0.2rem;
     }
-    .van-checkbox__icon {
-      top: 50%;
-      left: 10px;
-      z-index: 1;
-      position: absolute;
-      margin-top: -10px;
+    .item_right {
+      display: flex;
+      .item_img {
+        flex: 1;
+        padding: 0 0.1rem;
+        img {
+          width: 0.6rem;
+        }
+      }
+      .right_con {
+        flex: 3;
+        height: 0.6rem;
+        p {
+          width: 2.5rem;
+          height: 0.3rem;
+        }
+        .right_info {
+          display: flex;
+          justify-content: space-between;
+          padding: 0.05rem;
+          span {
+            font-size: 18px;
+            color: red;
+          }
+          .right_btn {
+            display: flex;
+          // justify-content: space-between;
+            .right_btn1 {
+              width: 0.2rem;
+              height: 0.2rem;
+              border-radius: 50%;
+              text-align: center;
+              line-height: 0.18rem;
+              border: 1px solid #efefef;
+              background-color: #efefef;
+            }
+            .right_num {
+              width: 0.3rem;
+              height: 0.2rem;
+              text-align: center;
+              line-height: 0.2rem;
+            }
+          }
+        }
+        .del {
+          width: 0.4rem;
+          height: 0.2rem;
+          // padding: 0.05rem;
+          border: 1px solid #efefef;
+          font-size: 12px;
+          text-align: center;
+          line-height: 0.2rem;
+        }
+      }
     }
-    .van-card__price {
-      color: #f44;
+  }
+}
+// .content {
+//   background-color: #8e8e8e;
+// }
+.end {
+  width: 100%;
+  height: 0.46rem;
+  background-color: white;
+  border-top: 1px solid#efefef;
+  padding: 0 0.1rem;
+  display: flex;
+  justify-content: space-between;
+  .end_box {
+    display: flex;
+    align-items: center;
+    .p1 {
+      font-size: 16px;
     }
+    .p2 {
+      width: 0.5rem;
+      height: 0.34rem;
+      text-align: center;
+      line-height: 0.34rem;
+      color: red;
+    }
+    .p3 {
+      width: 1rem;
+      height: 0.36rem;
+      background: linear-gradient(to bottom, #fe2828 0%,#e60000 100%);
+      margin-left: 0.1rem;
+      border-radius: 0.2rem;
+      text-align: center;
+      line-height: 0.34rem;
+      color: white;
+    }
+  }
+}
+.box_else {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 0;
+  span {
+    padding: 0.3rem 0;
+  }
+  .else_button {
+    width: 1.8rem;
+    height: 0.4rem;
+    border-radius: 0.2rem;
+    background: linear-gradient(to bottom, #fe2828 0%,#e60000 100%);
+    font-size: 16px;
+    text-align: center;
+    line-height: 0.4rem;
+    color: white;
   }
 }
 </style>

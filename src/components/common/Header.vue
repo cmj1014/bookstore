@@ -1,9 +1,9 @@
 <template>
   <header style="display: flex">
     <img src="../../../public/img/logo.png" alt="">
-    <input type="text" value="论语通译-张葆全">
+    <input type="text" v-model="text_msg" @click="goSearch">
     <div>
-      <van-icon name="search" />
+      <van-icon name="search" @click="goSearch"/>
     </div>
   </header>
 </template>
@@ -14,6 +14,16 @@ import { Icon } from 'vant'
 
 Vue.use(Icon)
 export default {
+  data () {
+    return {
+      text_msg: '论语通译-张葆全'
+    }
+  },
+  methods: {
+    goSearch () {
+      this.$router.push('/search')
+    }
+  }
 }
 </script>
 

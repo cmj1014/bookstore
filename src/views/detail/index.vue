@@ -113,6 +113,7 @@ Vue.use(Toast)
 export default {
   data () {
     return {
+      goDate: '',
       id: '',
       title: '',
       img: '',
@@ -135,7 +136,7 @@ export default {
     ...mapState({
       // loginState: (state) => { return state.loginState }
       loginState: 'loginState',
-      list: 'list'
+      cartlist: 'cartlist'
     }),
     // len () {
     //   return this.list.length
@@ -150,7 +151,7 @@ export default {
       console.log('客服')
     },
     goCart () {
-      console.log('去购物')
+      this.$router.push('/cart')
     },
     goShop () {
       console.log('店铺')
@@ -160,6 +161,11 @@ export default {
       const { $store: { state: { loginState } } } = this
       if (loginState === 'ok') {
         Toast.success('成功加入购物车')
+        this.cartlist.push(this.goDate)
+        this.$store.commit('changeCartList', {
+          result: this.cartlist
+        })
+        console.log(this.cartlist)
         // var arr = []
         // var goodid = getCook
       } else {
@@ -186,7 +192,8 @@ export default {
     fetch('/api/book/find?id=' + id)
       .then(res => res.json())
       .then(data => {
-        let detailData = data.data[0]
+        var detailData = data.data[0]
+        this.goDate = detailData
         this.id = detailData.id
         this.title = detailData.bookname
         this.img = detailData.img
