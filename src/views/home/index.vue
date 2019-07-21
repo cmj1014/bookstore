@@ -5,7 +5,7 @@
         <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
           <!-- 轮播图 -->
           <van-swipe :autoplay="3000" indicator-color="white">
-          <van-swipe-item v-for="(item, index) of bannerlist" :key="index">
+          <van-swipe-item v-for="(item, index) of bannerlist" :key="index" @click="goDeta(1001)">
             <img :src="item" alt="">
           </van-swipe-item>
           </van-swipe>
@@ -108,6 +108,9 @@ export default {
         this.pageNum = 1 // 重置页码 --- 下拉刷新相当于第一页数据
         this.finished = false // 表示可以继续上拉加载下一页的数据
       })
+    },
+    goDeta (id) {
+      this.$router.push({ name: 'detail', params: { id: id } })
     },
     onLoad () {
       console.log('可以加载数据了')

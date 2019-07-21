@@ -42,13 +42,20 @@
       </div>
     </div>
     <div class="end">
-      <van-checkbox v-model="checked">全选</van-checkbox>
-      <div class="end_box">
+      <div class="end_box1">
         <p class="p1">合计:</p>
+        <p class="p2">￥{{ totalPrice }}</p>
+      </div>
+      <div class="end_box">
         <!-- {{ totalPrice }} -->
         <!-- <p class="p2">￥{{ totalNum }}</p> -->
-        <p class="p2">￥{{ totalPrice }}</p>
         <p class="p3" @click="Settlement">结算</p>
+      </div>
+      <div class="task" id="task">
+        <div class="end_pay">
+          <img src="../../../public/img/payM.png" alt="">
+          <div class="end_btn" id="end_btn" @click="exit">确认付款</div>
+        </div>
       </div>
     </div>
   </div>
@@ -100,28 +107,14 @@ export default {
       this.$router.push('/home')
     },
     Settlement () {
-      ImagePreview([
-        'https://img.yzcdn.cn/2.jpg',
-        '../../../public/img/newbook.png'
-      ]);
-      var that = this
-      setTimeout(function(){
-        that.$router.push('/user')
-      },1000)
+      var task = document.getElementById('task')
+      task.style.display = 'block'
+    },
+    exit () {
+      var task = document.getElementById('task')
+      task.style.display = 'none'
+      this.$router.push('/user')
     }
-  },
-  mounted () {
-    this.cartlist.map(item => {
-      item.num = 1
-      item.flag = true
-    })
-    // 如果有数据就不需要重新去取
-    // if (this.cartlist.length > 0) {
-    //   return
-    // }
-    // this.$store.commit('changeCartList', {
-    //   result: this.cartlist
-    // })
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
@@ -144,10 +137,10 @@ ul {
     display: flex;
     align-items: center;
     padding: 0.1rem;
-    input {
-      width: 0.2rem;
-      height: 0.2rem;
-    }
+    // input {
+    //   // width: 0.2rem;
+    //   // height: 0.2rem;
+    // }
     .item_right {
       display: flex;
       .item_img {
@@ -216,19 +209,24 @@ ul {
   padding: 0 0.1rem;
   display: flex;
   justify-content: space-between;
-  .end_box {
+  .end_box1{
     display: flex;
     align-items: center;
     .p1 {
-      font-size: 16px;
+      font-size: 18px;
     }
     .p2 {
       width: 0.5rem;
       height: 0.34rem;
       text-align: center;
       line-height: 0.34rem;
+      font-size: 18px;
       color: red;
     }
+  }
+  .end_box {
+    display: flex;
+    align-items: center;
     .p3 {
       width: 1rem;
       height: 0.36rem;
@@ -239,6 +237,36 @@ ul {
       line-height: 0.34rem;
       color: white;
     }
+  }
+  .task{
+    display: none;
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    .end_pay {
+      position: absolute;
+      top: 10%;
+      left: 10%;
+      width: 80%;
+      height: 60%;
+      display: flex;
+      flex-direction: column;
+    img {
+      margin: 0.3rem 0 0;
+      height: 4rem;
+    }
+    .end_btn {
+      margin:0.4rem 0.4rem 0.1rem;
+      padding: 0.1rem 0;
+      border-radius: 0.5rem;
+      background: linear-gradient(to bottom, #fe2828 0%,#e60000 100%);
+      text-align: center;
+      color: white
+    }
+  }
   }
 }
 .box_else {

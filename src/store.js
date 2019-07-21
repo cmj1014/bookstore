@@ -15,23 +15,25 @@ export default new Vuex.Store({
       //   state.cartlist[i].flag ? totalNum += item.num : totalNum += 0
       // }
       state.cartlist.map(item => {
-        // item.flag ? totalNum += item.num : totalNum += 0
-        totalNum += item.num
+        item.flag ? totalNum += item.num : totalNum += 0
+        // totalNum += item.num
       })
       return totalNum
     },
     totalPrice (state) {
       let totalPrice = 0
+      console.log(state.cartlist)
       state.cartlist.map(item => {
-        // item.flag ? totalPrice += item.num * item.price : totalPrice += 0
         let amoney = item.money
-        // let newMoney = amoney.split('¥')[1]
-        console.log(amoney.split('¥')[0])
-        console.log(typeof (amoney))
-        // totalPrice += item.num * newMoney
-        // totalPrice = 5
+        let newMoney = amoney.split('¥')[1] * 1
+        console.log(item.flag)
+        console.log(item.id)
+        item.flag ? totalPrice += item.num * newMoney : totalPrice += 0
+        // console.log(amoney.split('¥')[1])
+        // totalPrice = item.num * newMoney
+        // totalPrice = parseFloat(totalPrice).toFixed(1)
       })
-      return totalPrice
+      return parseFloat(totalPrice).toFixed(1)
     }
   },
   mutations: { // 唯一改变状态的地方
@@ -39,7 +41,8 @@ export default new Vuex.Store({
       state.loginState = data
     },
     changeCartList (state, data) {
-      state.cartlist = data.result
+      let newArray = Array.from(new Set(data.result))
+      state.cartlist = newArray
     }
   },
   actions: {

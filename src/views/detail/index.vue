@@ -154,13 +154,20 @@ export default {
       this.$router.push('/cart')
     },
     goShop () {
-      console.log('店铺')
+      this.$router.push('/home')
     },
     addCart () {
       // this.show = true
       const { $store: { state: { loginState } } } = this
       if (loginState === 'ok') {
         Toast.success('成功加入购物车')
+        // console.log(this.goDate)
+        this.goDate.flag = true
+        this.goDate.num = 1
+        // this.goDate.map(item => {
+        //   item.flag = true
+        //   item.num = 1
+        // })
         this.cartlist.push(this.goDate)
         this.$store.commit('changeCartList', {
           result: this.cartlist
