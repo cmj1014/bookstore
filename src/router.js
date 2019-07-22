@@ -5,12 +5,26 @@ import Footer from '@/components/Footer'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
   routes: [
     {
       path: '/',
       redirect: '/home'
+    },
+    {
+      path: '/search',
+      name: 'search',
+      components: {
+        default: () => import('./views/search/index.vue')
+      }
+    },
+    {
+      path: '/searchlist:search',
+      name: 'searchlist',
+      components: {
+        default: () => import('./views/searchlist/index.vue')
+      }
     },
     {
       path: '/rankinglist/:id/:msg',
@@ -62,6 +76,21 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: () => import('./views/login/index.vue')
+    },
+    {
+      path: '/userInfo',
+      name: 'userInfo',
+      component: () => import('./views/userInfo/index.vue')
+    },
+     {
+      path: '/order',
+      name: 'order',
+      component: () => import('./views/order/index.vue')
+    },
+     {
+      path: '/aboutUs',
+      name: 'aboutUs',
+      component: () => import('./views/aboutUs/index.vue')
     },
     {
       path: '/register',

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+	
+	提交测试<br>
+	<form action="http://10.11.56.164:8090/users/addAction" method="post">
+		<h2>用户注册</h2>
+		电话号码<input type="text" name="tel">
+		密码<input type="text" name="password">
+		<input type="submit" value="提交">
+	</form>
+	<form action="http://10.11.56.164:8090/users/gettel" method="get">
+		<h2>电话号码查询</h2>
+		电话号码<input type="text" name="tel">
+		<input type="submit" value="提交">
+	</form>
+	<form action="/status/addCode" method="get">
+		<h2>发送验证码(未完成)</h2>
+		电话号码<input type="text" name="tel">
+		<input type="submit" value="提交">
+	</form>
+	<form action="http://10.11.56.164:8090/book" method="get">
+		<h2>查看所有书籍</h2>
+		<input type="submit" value="提交">
+	</form>
+	<form action="http://10.11.56.164:8090/book/find" method="get">
+		<h2>查看分类书籍</h2>
+		书籍种类<input type="text" name="kind">
+		书籍名称<input type="text" name="bookname">
+		<input type="submit" value="提交">
+	</form>
+	<form action="http://10.11.56.164:8090/book/distinctkind" method="get">
+		<h2>查看书籍种类</h2>
+		<input type="submit" value="提交">
+	</form>
+	<form action="http://10.11.56.164:8090/orders/add" method="get">
+		<h2>提交订单</h2>
+		手机号<input type="text" name="tel" value="18939920572">
+		书名<input type="goodsname" name="tel" value="中国风俗文化集萃---中国善恶报应习俗">
+		商品_id<input type="text" name="goodsId" value="5d2d938f104f4e76ab1c70f5">
+		商品id<input type="text" name="goodsid" value="6012">
+		总价格<input type="text" name="money" value="212">
+		单价<input type="text" name="unitPrice" value="32">
+		商品图片<input type="text" name="img" value="http://image31.bookschina.com/2018/zuo/11/5574720.jpg">
+分类<input type="text" name="kind" value="文化">
+购买数量<input type="text" name="num" value="6">
+购买用户id<input type="text" name="userid" value="5d2f1b6944e8c9bded11f656">
+		<input type="submit" value="提交">
+	</form>
+	<form action="http://10.11.56.164:8090/orders/getUserOrder" method="post">
+			<h2>查看订单</h2>
+			手机号<input type="text" name="tel" value="18939920572">
+			<!-- 书名<input type="goodsname" name="tel" value="中国风俗文化集萃---中国善恶报应习俗">
+			商品_id<input type="text" name="goodsId" value="5d2d938f104f4e76ab1c70f5">
+			商品id<input type="text" name="goodsid" value="6012">
+			总价格<input type="text" name="money" value="212">
+			单价<input type="text" name="unitPrice" value="32">
+			商品图片<input type="text" name="img" value="http://image31.bookschina.com/2018/zuo/11/5574720.jpg">
+	分类<input type="text" name="kind" value="文化">
+	购买数量<input type="text" name="num" value="6">
+	购买用户id<input type="text" name="userid" value="5d2f1b6944e8c9bded11f656"> -->
+			<input type="submit" value="提交">
+		</form>
+  </body>
+  <script>
+  shopid()
+  function shopid(){
+	  let date = new Date();
+	  date= date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()+" "+(date.getHours())+":"+date.getMinutes()+":"+date.getSeconds();
+	  //alert(date)
+	  return date
+  }
+  function test(){
+	  let a1 ="a1";
+	  let a2 ="a2";
+	  let a3 ="a3";
+	  let arr = [{id:a1,name:"cmj"},{id:a2,name:"cmj2"},{id:a1,name:"cmj啊"},{id:a3,name:"3cmj"},{id:a2,name:"cmj22"}];
+	  console.log(arr);
+	  let newarr = {};
+	  let orderId = [];
+	  for (var i = 0; i < arr.length; i++) {
+	    //console.log(data.data[i].orderId);
+	  orderId.push(arr[i].id);
+	  }
+	  orderId = Array.from(new Set(orderId));
+	  console.log(orderId)
+	 
+	  for (var i = 0; i < arr.length; i++) {
+		  console.log(arr[i].id);
+		  for (var j = 0; j < orderId.length;j++) {
+		  	
+			if(orderId[j].indexOf(arr[i].id)){
+				//console.log(arr[i].id);
+				//newarr[j].push(arr[i]);
+				//newarr.push({orderId[j]:{arr[i]}})
+				//[a1]
+			}
+		  }
+	  	
+	  }
+	  
+
+var obj = new Object
+
+arr.map(function(o){
+	debugger
+ var tmpArr = obj[o.id]==undefined?[]:obj[o.id]
+ tmpArr.push(o)
+ obj[o.id]=tmpArr
+})
+	  console.log(obj)
+  }
+  //test()
+  
+  </script>
+</html>

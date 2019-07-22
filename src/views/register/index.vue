@@ -30,7 +30,7 @@
           required
         />
 
-        <van-field
+       <!-- <van-field
           v-model="sms"
           center
           required
@@ -39,7 +39,7 @@
           placeholder="请输入短信验证码"
         >
           <van-button slot="button" @click="sendCode" size="small" type="primary">发送验证码</van-button>
-        </van-field>
+        </van-field> -->
       </van-cell-group>
        <van-button type="primary" size="normal" @click="register" :block="true">注册</van-button>
   </div>
@@ -133,18 +133,21 @@ export default {
         Toast('密码格式错误')
         return null
       }
-      if (this.sms !== this.code) {
+      /* if (this.sms !== this.code) {
         Toast('验证码错误')
         return null
-      }
+      } */
       // 提交数据到服务器
-      fetch('https://www.daxunxun.com/users/register', {
+      //fetch('/api/users/addAction', {
+        fetch('http://47.100.225.183:8090/users/addAction', {
+
         method: 'post',
         headers: { // 看后端接口，数据类型要匹配上，还有json类型的
           'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: 'username=' + this.username + '&password=' + this.password
+        body: 'tel=' + this.username + '&password=' + this.password
       }).then(res => res.json()).then(data => {
+        console.log(data)
         if (data === 1) {
           Toast('注册成功')
           this.$router.push('./login')

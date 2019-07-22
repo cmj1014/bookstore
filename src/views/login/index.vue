@@ -48,8 +48,8 @@ Vue.use(Dialog)
 export default {
   data () {
     return {
-      username: '18895312923',
-      password: '123456'
+      username: '',
+      password: ''
     }
   },
   computed: {
@@ -111,7 +111,9 @@ export default {
         return null
       }
       // 提交数据到服务器
-      fetch('https://www.daxunxun.com/users/login', {
+      //fetch('/api/users/login', {
+        fetch('http://47.100.225.183:8090/users/login', {
+
         method: 'post',
         headers: { // 看后端接口，数据类型要匹配上，还有json类型的
           'Content-Type': 'application/x-www-form-urlencoded'
@@ -119,9 +121,29 @@ export default {
         body: 'username=' + this.username + '&password=' + this.password
       }).then(res => res.json()).then(data => {
         if (data === 1) {
+          console.log("tel:"+this.username)
           Toast('登录成功')
-          this.$store.commit('changeLoginState', 'ok')
-          this.$router.back() // 登录成功后会返回上个页面user页面，进入user页面前有路由守卫判断后直接进入个人用户
+          // 获取用户信息
+         // fetch("/api/users/gettel", {
+           fetch("http://47.100.225.183:8090/users/gettel", {
+
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      "tel": this.username,
+    })
+  }).then(res => res.json()).then(data => {
+
+      this.$store.commit('changeLoginState', 'ok')
+      this.$store.commit('saveTel', data.data[0].tel)
+      this.$store.commit('saveId', data.data[0]._id)
+      //this.$router.back() // 登录成功后会返回上个页面user页面，进入user页面前有路由守卫判断后直接进入个人用户
+      this.$router.push("/user")
+  })
+
+
         } else if (data === 2) {
           Dialog.confirm({
             title: '提示',

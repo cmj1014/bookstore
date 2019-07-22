@@ -4,7 +4,7 @@
       <van-nav-bar
         :title='title'
         left-text='返回'
-        right-text='分享'
+        right-text=''
         left-arrow
         @click-left='back'
         @click-right='share'
@@ -13,7 +13,9 @@
         <!-- 主图 -->
         <div class="bookCover">
           <div class="master">
-            <a :href="img"><img :src="img" alt=""></a>
+           <!-- <a :href="img"><img :src="img" alt=""></a> -->
+           <img :src="img" alt="">
+<!--            ImagePreview(['{{img}}']); -->
             <!-- <a href="http://image31.bookschina.com/2019/zuo/6/8041723.jpg"><img src="http://image31.bookschina.com/2019/zuo/6/8041723.jpg" alt=""></a> -->
           </div>
         </div>
@@ -68,8 +70,8 @@
         </div>
         <h4 class="five">本类五星书籍</h4>
         <div class="detail_item">
-            <Detaillist :detaillist='detaillist'/>
-          </div>
+          <Detaillist :detaillist='detaillist'/>
+        </div>
         <div class="empty"></div>
         <div class="empty"></div>
         <div class="empty"></div>
@@ -98,7 +100,8 @@
 <script>
 import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
-import { GoodsAction, GoodsActionIcon, GoodsActionButton, NavBar, Sku, Tab, Tabs, Row, Col, Icon, Toast } from 'vant'
+import { GoodsAction, GoodsActionIcon, GoodsActionButton, NavBar, Sku, Tab, Tabs, Row, Col, Icon, Toast ,ImagePreview} from 'vant'
+
 import Detaillist from '@/components/common/Detaillist'
 Vue.use(GoodsAction)
   .use(GoodsActionIcon)
@@ -109,10 +112,12 @@ Vue.use(Tab).use(Tabs)
 Vue.use(Row).use(Col)
 Vue.use(Icon)
 Vue.use(Toast)
+Vue.use(ImagePreview);
 
 export default {
   data () {
     return {
+      goDate: '',
       id: '',
       title: '',
       img: '',
@@ -135,7 +140,7 @@ export default {
     ...mapState({
       // loginState: (state) => { return state.loginState }
       loginState: 'loginState',
-      list: 'list'
+      cartlist: 'cartlist'
     }),
     // len () {
     //   return this.list.length
@@ -150,16 +155,28 @@ export default {
       console.log('客服')
     },
     goCart () {
-      console.log('去购物')
+      this.$router.push('/cart')
     },
     goShop () {
-      console.log('店铺')
+      this.$router.push('/home')
     },
     addCart () {
       // this.show = true
       const { $store: { state: { loginState } } } = this
       if (loginState === 'ok') {
         Toast.success('成功加入购物车')
+        // console.log(this.goDate)
+        this.goDate.flag = true
+        this.goDate.num = 1
+        // this.goDate.map(item => {
+        //   item.flag = true
+        //   item.num = 1
+        // })
+        this.cartlist.push(this.goDate)
+        this.$store.commit('changeCartList', {
+          result: this.cartlist
+        })
+        console.log(this.cartlist)
         // var arr = []
         // var goodid = getCook
       } else {
@@ -181,12 +198,18 @@ export default {
     }
   },
   mounted () {
-    console.log(this.$route)
+    //console.log(this.$route)
     const { id } = this.$route.params
-    fetch('/api/book/find?id=' + id)
+    const wid = this.$route.params.id
+    //console.log("$route",$route);
+    console.log("id",id);
+    console.log("wid",wid);
+    // fetch('/api/book/find?id=' + id)
+    fetch('http://47.100.225.183:8090/book/find?id=' + id)
       .then(res => res.json())
       .then(data => {
-        let detailData = data.data[0]
+        var detailData = data.data[0]
+        this.goDate = detailData
         this.id = detailData.id
         this.title = detailData.bookname
         this.img = detailData.img
@@ -196,7 +219,8 @@ export default {
         this.publishingouse = detailData.publishingouse
         this.time = detailData.time
         this.kind = detailData.kind
-        fetch('/api/book/find?kind=' + this.kind, { method: 'GET' })
+        //fetch('/api/book/find?kind=' + this.kind, { method: 'GET' })
+        fetch('http://47.100.225.183:8090/book/find?kind=' + this.kind, { method: 'GET' })
           .then(res => res.json()).then(data => {
             this.detaillist = data.data
           })

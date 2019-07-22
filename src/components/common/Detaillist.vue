@@ -8,6 +8,10 @@
       <div class="iteminfo">
         <h3>{{ item.bookname }}</h3>
       </div>
+      <div class="itempro">
+        <span> {{ item.money }} </span>
+        <p> {{ item.writer }} </p>
+      </div>
     </li>
   </ul>
 </template>
@@ -24,7 +28,11 @@ export default {
   },
   methods: {
     goDeta (id) {
+		//console.log(id)
+    //console.log(this)
+    //console.log(this.$router)
       this.$router.push({ name: 'detail', params: { id: id } })
+      location.reload();
     }
   }
 }
@@ -38,23 +46,44 @@ export default {
   @include flex-wrap(wrap);
   .detailitem {
     @include flexbox();
-    @include rect(49%, 1.2rem);
-    @include padding(0.1rem);
+    @include border(1px 1px 1px 1px, #efefef, solid);
+    @include rect(50%, 2rem);
     @include flex-direction(column);
-    @include margin(0.1rem 0);
     .itemimg {
-      @include rect(100%, 1rem);
+      @include rect(100%, 1.2rem);
+      @include padding(0.1rem);
+      @include text-align();
       img {
-        @include rect(100%, 100%);
+        @include rect(auto, 100%);
         // @include margin(0.1rem);
       }
     }
     .iteminfo {
+      @include rect(100%, 0.45rem);
       h3 {
         @include font-size(0.12rem);
-        @include ellipsis(1);
-        @include text-align();
         @include margin(0.05rem 0 0);
+        @include padding(0 0.15rem 0.05rem);
+        @include font-weight(500);
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+      }
+    }
+    .itempro {
+      @include flexbox();
+      @include padding(0 0.15rem 0.05rem);
+      span {
+        @include flex();
+        @include color(#e60000);
+        @include font-size(16px);
+      }
+      p {
+        @include flex(1.5);
+        @include ellipsis(1);
+        @include font-size(12px);
+        @include padding(0.02rem 0 0);
       }
     }
   }

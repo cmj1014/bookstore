@@ -37,7 +37,9 @@ export default {
   mounted () {
     const { id, msg } = this.$route.params
     this.header_msg = msg
-    fetch('/api/book/find?kind=' + id, { method: 'GET' })
+    //fetch('/api/book/find?kind=' + id, { method: 'GET' })
+     fetch('http://47.100.225.183:8090/book/find?kind=' + id, { method: 'GET' })
+
       .then(res => res.json())
       .then(data => {
         this.prolist = data.data
