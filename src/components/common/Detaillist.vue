@@ -29,6 +29,7 @@ export default {
   methods: {
     goDeta (id) {
       this.$router.push({ name: 'detail', params: { id: id } })
+      this.$router.go(0)
     }
   }
 }
