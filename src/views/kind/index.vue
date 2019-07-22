@@ -24,7 +24,7 @@
           <div class="item2_banner">
             <!-- 轮播图 -->
             <van-swipe :autoplay="3000" indicator-color="white">
-              <van-swipe-item v-for="(item, index) of bannerlist" :key="index">
+              <van-swipe-item v-for="(item, index) of bannerlist" :key="index" @click="getDeta(1002)">
                 <img :src="item" alt="">
               </van-swipe-item>
             </van-swipe>
@@ -79,14 +79,21 @@ export default {
           this.kindlist = data.data
         })
     },
+    getDeta (id) {
+      this.$router.push({ name: 'detail', params: { id: id } })
+    },
     goRanking (id, msg) {
       this.$router.push({ name: 'rankinglist', params: { id: id, msg: msg } })
     }
   },
   mounted () {
+<<<<<<< HEAD
     //fetch('/api/banner')
     fetch('http://47.100.225.183:8090/banner')
 
+=======
+    fetch('/api/banner')
+>>>>>>> db717d48058ee26ff4c6dfd3a669cf1b9c85bd51
       .then(res => res.json())
       .then(data => {
         console.log(data.data)
